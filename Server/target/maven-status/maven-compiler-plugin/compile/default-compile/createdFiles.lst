@@ -1,0 +1,8 @@
+subject/Subject.class
+fr/alma/middleware/server/ServerForum.class
+fr/alma/middleware/remote/InterfaceAffichageClient.class
+fr/alma/middleware/server/MainServer.class
+fr/alma/middleware/remote/InterfaceSujetDiscussion.class
+fr/alma/middleware/remote/InterfaceServeurForum.class
+fr/alma/middleware/server/Server.class
+fr/alma/middleware/App.class
