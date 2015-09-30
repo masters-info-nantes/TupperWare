@@ -1,5 +1,8 @@
 package fr.alma.middleware.controller;
 
+import java.util.List;
+
+
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
@@ -34,6 +37,10 @@ public class ClientController{
 	
 	public void logon(){
 		
+	}
+
+	public List<String> getExistingTopics() {
+		return null;
 	}
 	
 }
