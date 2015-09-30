@@ -1,7 +1,9 @@
 package fr.alma.middleware.remote;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-import java.rmi.*;
+
 
 public interface InterfaceAffichageClient extends Remote {
 	
