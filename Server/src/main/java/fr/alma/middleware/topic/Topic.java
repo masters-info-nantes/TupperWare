@@ -1,4 +1,4 @@
-package fr.alma.middleware.subject;
+package fr.alma.middleware.topic;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -15,7 +15,7 @@ import javafx.scene.control.TextArea;
  *		
  */
 
-public class Subject {
+public class Topic {
 
 	
 	private String name;
@@ -24,7 +24,7 @@ public class Subject {
 	private TextArea textArea;
 	private File file;
 	
-	public Subject(String name){
+	public Topic(String name){
 		this.name = name;
 		this.clientList = new HashSet<String>();
 		this.file = new File(name + ".logs");
@@ -64,9 +64,9 @@ public class Subject {
 	}
 	
 	
-	public synchronized void writeLineInFile(Message m){
+	public synchronized void writeLineInFile(String m){
 		try {
-			fichier.write(m.toString());
+			fichier.write(m);
 			fichier.newLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

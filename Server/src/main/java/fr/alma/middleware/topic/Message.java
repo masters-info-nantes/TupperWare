@@ -1,4 +1,4 @@
-package fr.alma.middleware.subject;
+package fr.alma.middleware.topic;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ public class Message {
 	private String clientPseudo;
 	private Date dateMessage;
 	private String messageContent;
-	private Subject subject;
+	private Topic subject;
 	
 	
 	public String toString(){
