@@ -1,27 +1,38 @@
 package fr.alma.middleware.subject;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
+import javafx.scene.control.TextArea;
+
+/* Plusieurs solutions pour la persistence:
+ * 
+ * 		Chaque client écrit dans le fichier de logs (affichage sur l'écran ensuite)
+ *		
+ */
 
 public class Subject {
 
 	
 	private String name;
 	private Set<String> clientList;
-	private PrintWriter pWriter;
+	private BufferedWriter fichier;
+	private TextArea textArea;
+	private File file;
 	
 	public Subject(String name){
 		this.name = name;
 		this.clientList = new HashSet<String>();
+		this.file = new File(name + ".logs");
 		
 		try {
-			pWriter = new PrintWriter(name+".logs", "UTF-8");
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+			fichier = new BufferedWriter(new FileWriter(name + ".logs"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -53,12 +64,24 @@ public class Subject {
 	}
 	
 	
-	public void writeLineInFile(String s){
-		pWriter.println(s);
+	public synchronized void writeLineInFile(Message m){
+		try {
+			fichier.write(m.toString());
+			fichier.newLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
+	
 	public void closeLogsFile(){
-		pWriter.close();
+		try {
+			fichier.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
