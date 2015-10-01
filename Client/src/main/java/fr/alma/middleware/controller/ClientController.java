@@ -1,9 +1,10 @@
 package fr.alma.middleware.controller;
 
-import java.util.ArrayList;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.List;
-
-import javax.security.auth.Subject;
 
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
@@ -16,12 +17,23 @@ public class ClientController{
 	private InterfaceAffichageClient interfaceAffichageClient;
 	private InterfaceSujetDiscussion interfaceSujetDiscussion;
 	
-	private List<Subject> topicList;
-	private int currenTab;
+	private List<String> topicList;
+	private int currentTab;
 	
 	public ClientController(){
-		this.topicList = new ArrayList<Subject>();
-		this.currenTab = 0;
+		Registry registry = null;
+		try {
+			registry = LocateRegistry.getRegistry(1234);
+			interfaceServerForum = (InterfaceServeurForum) registry.lookup("forum");
+			interfaceAffichageClient = (InterfaceAffichageClient) registry.lookup("display");
+			interfaceSujetDiscussion = (InterfaceSujetDiscussion) registry.lookup("topic");
+			
+			this.topicList = interfaceServerForum.getTopicsTitle();
+		} catch (RemoteException | NotBoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.currentTab = 0;
 	}
 	
 	
@@ -50,7 +62,7 @@ public class ClientController{
 		
 	}
 
-	public List<Subject> getExistingTopics() {
+	public List<String> getExistingTopics() {
 		//some stuff
 		return topicList;
 	}
@@ -61,7 +73,7 @@ public class ClientController{
 	}
 	
 	public int getCurrentTab(){
-		return this.currenTab;
+		return this.currentTab;
 	}
 	
 }
