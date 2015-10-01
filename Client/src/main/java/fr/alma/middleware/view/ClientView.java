@@ -1,8 +1,5 @@
 package fr.alma.middleware.view;
 
-import java.rmi.Naming;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.Optional;
 
 import javafx.application.Application;
@@ -28,7 +25,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 import fr.alma.middleware.controller.ClientController;
-import fr.alma.middleware.remote.InterfaceServeurForum;
 
 
 public class ClientView extends Application{
@@ -58,7 +54,6 @@ public class ClientView extends Application{
 				if(newTab.isSelected() == true){
 					//Open Dialog for topic creation
 					createNewTopicChan();
-					System.out.println("Ca marche!");
 				}
 				
 			}

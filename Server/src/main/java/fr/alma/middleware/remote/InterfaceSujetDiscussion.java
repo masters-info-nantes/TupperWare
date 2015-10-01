@@ -1,6 +1,7 @@
 package fr.alma.middleware.remote;
 
 
+
 import java.rmi.*;
 
 public interface InterfaceSujetDiscussion extends Remote {

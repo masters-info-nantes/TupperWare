@@ -40,7 +40,7 @@ public class MainServer extends UnicastRemoteObject{
 			LocateRegistry.createRegistry(port);
 			Registry registry = LocateRegistry.getRegistry(port);
 			MainServer obj = new MainServer();
-			registry.rebind("127.0.0.1", obj);
+			registry.rebind(ip_adress, obj);
 			
 			System.out.println("Serveur lancé à l'adresse "+ip_adress + ":" + port);
 		} catch (Exception e) {
