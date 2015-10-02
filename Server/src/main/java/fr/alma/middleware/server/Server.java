@@ -2,7 +2,7 @@ package fr.alma.middleware.server;
 
 import java.util.List;
 
-import data.Topic;
+import fr.alma.middleware.data.Topic;
 
 public class Server {
 
