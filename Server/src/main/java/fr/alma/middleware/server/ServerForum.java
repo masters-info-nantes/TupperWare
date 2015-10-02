@@ -1,13 +1,28 @@
 package fr.alma.middleware.server;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 
+import fr.alma.middleware.data.Topic;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
-public class ServerForum implements InterfaceServeurForum {
+public class ServerForum extends UnicastRemoteObject implements InterfaceServeurForum, Serializable {
 
+	protected ServerForum() throws RemoteException {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private List<String> list;
+	
 	@Override
 	public InterfaceSujetDiscussion obtientSujet(String titre)
 			throws RemoteException {
@@ -24,8 +39,10 @@ public class ServerForum implements InterfaceServeurForum {
 
 	@Override
 	public List<String> getTopicsTitle() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		list = new ArrayList<String>();
+		
+		list.add("jambon");
+		return list;
 	}
 
 	@Override

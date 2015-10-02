@@ -1,10 +1,7 @@
 package fr.alma.middleware.data;
 
-import java.rmi.RemoteException;
 
-import fr.alma.middleware.remote.InterfaceAffichageClient;
-
-public class Client implements InterfaceAffichageClient{
+public class Client{
 
 	
 	private String name;
@@ -18,11 +15,6 @@ public class Client implements InterfaceAffichageClient{
 		return ip;
 	}
 
-	@Override
-	public void affiche(String Message) throws RemoteException {
-		// TODO Auto-generated method stub
-		
-	}
-	
+
 	
 }

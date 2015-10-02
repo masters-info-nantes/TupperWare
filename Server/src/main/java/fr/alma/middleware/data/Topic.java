@@ -4,7 +4,9 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +19,7 @@ import fr.alma.middleware.remote.InterfaceSujetDiscussion;
  *		
  */
 
-public class Topic implements InterfaceSujetDiscussion{
+public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussion, Serializable{
 
 
 	private String name;
@@ -25,7 +27,7 @@ public class Topic implements InterfaceSujetDiscussion{
 	private BufferedWriter fichier;
 	private File file;
 
-	public Topic(String name){
+	public Topic(String name) throws Exception{
 		this.name = name;
 		this.clientList = new HashSet<Client>();
 		this.file = new File(name + ".logs");

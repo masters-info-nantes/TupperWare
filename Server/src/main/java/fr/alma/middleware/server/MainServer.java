@@ -3,13 +3,13 @@ package fr.alma.middleware.server;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.rmi.server.UnicastRemoteObject;
 
+import fr.alma.middleware.data.Topic;
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
-public class MainServer extends UnicastRemoteObject {
+public class MainServer{
 
 
 	private InterfaceServeurForum isf;
@@ -20,7 +20,12 @@ public class MainServer extends UnicastRemoteObject {
 		super();
 		this.isf = new ServerForum();
 		this.iac = new ServerAfficheClient();
-		this.isd = new ServerSujetDiscussion();
+		try {
+			this.isd = new Topic("on");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
     

@@ -22,7 +22,8 @@ public class ClientController{
 
 	public ClientController(){
 		this.currentTab = 0;
-		connect();
+		this.connect();
+		
 	}
 
 
@@ -39,7 +40,8 @@ public class ClientController{
 		return interfaceSujetDiscussion;
 	}
 
-	public void connect(){
+	private void connect(){
+		System.out.println("Bonjourdddd");
 		try {
 			interfaceServerForum = (InterfaceServeurForum) LocateRegistry.getRegistry(1024).lookup("forum");
 			interfaceAffichageClient = (InterfaceAffichageClient) LocateRegistry.getRegistry(1024).lookup("affichage");
