@@ -41,7 +41,11 @@ public class ClientController{
 
 	public void connect(){
 		try {
-			LocateRegistry.getRegistry(1024).lookup("127.0.0.1");
+			interfaceServerForum = (InterfaceServeurForum) LocateRegistry.getRegistry(1024).lookup("forum");
+			interfaceAffichageClient = (InterfaceAffichageClient) LocateRegistry.getRegistry(1024).lookup("affichage");
+			interfaceSujetDiscussion = (InterfaceSujetDiscussion) LocateRegistry.getRegistry(1024).lookup("sujet");
+            //interfaceAffichageClient = (InterfaceAffichageClient) registry.lookup("affichage");
+
 		} catch (RemoteException | NotBoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

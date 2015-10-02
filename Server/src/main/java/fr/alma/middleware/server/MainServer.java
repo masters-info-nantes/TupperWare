@@ -9,7 +9,7 @@ import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
-public class MainServer extends UnicastRemoteObject{
+public class MainServer extends UnicastRemoteObject {
 
 
 	private InterfaceServeurForum isf;
@@ -20,8 +20,25 @@ public class MainServer extends UnicastRemoteObject{
 		super();
 		this.isf = new ServerForum();
 		this.iac = new ServerAfficheClient();
+		this.isd = new ServerSujetDiscussion();
 		
 	}
+    
+    public InterfaceServeurForum getIsf()
+    {
+        return isf;
+    }
+    
+    public InterfaceAffichageClient getIac()
+    {
+        return iac;
+    }
+    
+    public InterfaceSujetDiscussion getIsd()
+    {
+        return isd;
+    }
+        
 
 
 
@@ -38,7 +55,9 @@ public class MainServer extends UnicastRemoteObject{
 			
 			Registry registry =  LocateRegistry.createRegistry(port);
 			MainServer obj = new MainServer();
-			registry.rebind(ip_adress, obj);
+			registry.rebind("forum", obj.getIsf());
+			registry.rebind("affichage", obj.getIac());
+			registry.rebind("sujet", obj.getIsd());
 			
 			System.out.println("Serveur lancé à l'adresse "+ip_adress + ":" + port);
 		} catch (Exception e) {
