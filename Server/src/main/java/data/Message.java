@@ -1,4 +1,4 @@
-package fr.alma.middleware.topic;
+package data;
 
 import java.util.Date;
 

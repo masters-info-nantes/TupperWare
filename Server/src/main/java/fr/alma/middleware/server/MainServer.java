@@ -1,6 +1,5 @@
 package fr.alma.middleware.server;
 
-import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -21,7 +20,6 @@ public class MainServer extends UnicastRemoteObject{
 		super();
 		this.isf = new ServerForum();
 		this.iac = new ServerAfficheClient();
-		this.isd = new ServerSujetDiscussion();
 		
 	}
 

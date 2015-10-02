@@ -59,12 +59,12 @@ public class ClientController{
 	public List<String> getExistingTopics() {
 		//some stuff
 		List<String> list = null;
-		try {
+		/*try {
 			list =  interfaceServerForum.getTopicsTitle();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		return list;
 	}
 
