@@ -1,5 +1,6 @@
 package fr.alma.middleware.data;
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -30,7 +31,7 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 	public Topic(String name) throws Exception{
 		this.name = name;
 		this.clientList = new HashSet<Client>();
-		this.file = new File(name + ".logs");
+		this.file = new File("logs/" + name + ".logs");
 
 		try {
 			fichier = new BufferedWriter(new FileWriter(name + ".logs"));
@@ -91,7 +92,7 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 	@Override
 	public void inscription(InterfaceAffichageClient c) throws RemoteException {
 		if(!clientList.contains(c)){
-			//clientList.add((Client)c);
+			clientList.add((Client)c);
 		}
 	}
 

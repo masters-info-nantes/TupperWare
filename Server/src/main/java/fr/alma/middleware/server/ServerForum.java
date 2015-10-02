@@ -21,7 +21,7 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private List<String> list;
+	private List<Topic> list = new ArrayList<Topic>();
 	
 	@Override
 	public InterfaceSujetDiscussion obtientSujet(String titre)
@@ -39,10 +39,12 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 
 	@Override
 	public List<String> getTopicsTitle() throws RemoteException {
-		list = new ArrayList<String>();
+		List<String> topicsTitle = new ArrayList<String>();
+		for(int i = 0; i < list.size(); i++){
+			topicsTitle.add(list.get(i).toString());
+		}
 		
-		list.add("jambon");
-		return list;
+		return topicsTitle;
 	}
 
 	@Override
@@ -51,6 +53,8 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 		return null;
 	}
 	
-	
+	public void addTopic(Topic t){
+		list.add(t);
+	}
 
 }

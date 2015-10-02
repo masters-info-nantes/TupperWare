@@ -3,6 +3,8 @@ package fr.alma.middleware.server;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.ArrayList;
+import java.util.List;
 
 import fr.alma.middleware.data.Topic;
 import fr.alma.middleware.remote.InterfaceAffichageClient;
@@ -15,13 +17,17 @@ public class MainServer{
 	private InterfaceServeurForum isf;
 	private InterfaceAffichageClient iac;
 	private InterfaceSujetDiscussion isd;
+	private List<Topic> topicList;
 
 	protected MainServer() throws RemoteException {
 		super();
+		topicList = new ArrayList<Topic>();
 		this.isf = new ServerForum();
 		this.iac = new ServerAfficheClient();
 		try {
-			this.isd = new Topic("on");
+			((ServerForum) isf).addTopic(new Topic("Sport"));
+			((ServerForum) isf).addTopic(new Topic("Musique"));
+			((ServerForum) isf).addTopic(new Topic("Cinema"));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

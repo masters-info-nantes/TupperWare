@@ -18,6 +18,7 @@ public class ClientController{
 	private InterfaceSujetDiscussion interfaceSujetDiscussion;
 
 	private List<String> topicList;
+	private List<String> subscriptionsList;
 	private int currentTab;
 
 	public ClientController(){
@@ -41,11 +42,10 @@ public class ClientController{
 	}
 
 	private void connect(){
-		System.out.println("Bonjourdddd");
 		try {
 			interfaceServerForum = (InterfaceServeurForum) LocateRegistry.getRegistry(1024).lookup("forum");
 			interfaceAffichageClient = (InterfaceAffichageClient) LocateRegistry.getRegistry(1024).lookup("affichage");
-			interfaceSujetDiscussion = (InterfaceSujetDiscussion) LocateRegistry.getRegistry(1024).lookup("sujet");
+			//interfaceSujetDiscussion = (InterfaceSujetDiscussion) LocateRegistry.getRegistry(1024).lookup("sujet");
             //interfaceAffichageClient = (InterfaceAffichageClient) registry.lookup("affichage");
 
 		} catch (RemoteException | NotBoundException e) {
@@ -65,30 +65,45 @@ public class ClientController{
 	public List<String> getExistingTopics() {
 		//some stuff
 		List<String> list = null;
-		/*try {
+		try {
 			list =  interfaceServerForum.getTopicsTitle();
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
+		
+		for(int i = 0; i < list.size(); i++){
+			System.out.println(list.get(i));
+		}
+	
 		return list;
 	}
 
 	//Get topic logs file from server
-	public String getLogsContent(int index){
+	public String getLogsContent(String logsFile){
 		String logs = "";
 		try {
-			logs = interfaceAffichageClient.getLogsContent(index);
+			logs = interfaceAffichageClient.getLogsContent(logsFile);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
 		return logs;
 	}
 
-	public int getCurrentTab(){
+	public int getCurrentTabName(){
 		return this.currentTab;
 	}
+	
+	public List<String> getSubcriptionsList(){
+		return this.subscriptionsList;
+	}
+	
+	public String getSubcriptionByIndex(int i){
+		return this.subscriptionsList.get(i);
+		
+	}
 
+	
 	public void write(String message, String name){
 		try {
 			interfaceSujetDiscussion.diffuse(

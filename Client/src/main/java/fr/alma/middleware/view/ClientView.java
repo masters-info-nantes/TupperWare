@@ -44,8 +44,10 @@ public class ClientView extends Application{
 		newTab = new Tab();
 		newTab.setClosable(false);
 		
+		//String firstSubcriptionTopic = controller.getSubcriptionByIndex(0);
+		
 		//Open the first topic in the list of subscribing
-		textArea = new TextArea(controller.getLogsContent(0));
+		//textArea = new TextArea(controller.getLogsContent(firstSubcriptionTopic));
 		
 		newTab.setOnSelectionChanged(new EventHandler<Event>() {
 			
@@ -105,9 +107,6 @@ public class ClientView extends Application{
 		controller.getExistingTopics();
 	}
 	
-	public void refreshTextArea(){
-		textArea.setText(controller.getLogsContent(controller.getCurrentTab()));
-	}
 	
 	
 	public void dialogBox(){
