@@ -45,7 +45,7 @@ public class ClientController{
 		try {
 			interfaceServerForum = (InterfaceServeurForum) LocateRegistry.getRegistry(1024).lookup("forum");
 			interfaceAffichageClient = (InterfaceAffichageClient) LocateRegistry.getRegistry(1024).lookup("affichage");
-			//interfaceSujetDiscussion = (InterfaceSujetDiscussion) LocateRegistry.getRegistry(1024).lookup("sujet");
+			interfaceSujetDiscussion = (InterfaceSujetDiscussion) LocateRegistry.getRegistry(1024).lookup("sujet");
             //interfaceAffichageClient = (InterfaceAffichageClient) registry.lookup("affichage");
 
 		} catch (RemoteException | NotBoundException e) {
