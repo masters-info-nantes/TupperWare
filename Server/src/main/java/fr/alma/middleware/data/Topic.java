@@ -8,8 +8,6 @@ import java.rmi.RemoteException;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.sun.security.ntlm.Client;
-
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 

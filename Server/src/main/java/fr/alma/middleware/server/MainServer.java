@@ -26,6 +26,7 @@ public class MainServer extends UnicastRemoteObject{
 
 
 	public static void main(String[] args) {
+		System.out.println("HELLO WORLD !");
 		runServer("127.0.0.1", 1024);
 		
 	}
@@ -35,8 +36,7 @@ public class MainServer extends UnicastRemoteObject{
 	public static void runServer(String ip_adress, int port){
 		try {
 			
-			LocateRegistry.createRegistry(port);
-			Registry registry = LocateRegistry.getRegistry(port);
+			Registry registry =  LocateRegistry.createRegistry(port);
 			MainServer obj = new MainServer();
 			registry.rebind(ip_adress, obj);
 			
