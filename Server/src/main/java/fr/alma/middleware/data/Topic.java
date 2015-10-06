@@ -27,6 +27,17 @@ public class Topic {
 	public Topic(String name) throws Exception{
 		this.name = name;
 		this.clientList = new HashSet<Client>();
+        //Check if the log directory is present, if not, create it
+        File dir = new File("logs");
+        if (!dir.exists()) {
+            try{
+                dir.mkdir();
+            }
+            catch(SecurityException se){
+                System.out.println("Error: Can't create the logs directory!");
+            }       
+        }
+        //Open the log files or create them
 		this.file = new File("logs/" + name + ".logs");
 
 		try {
