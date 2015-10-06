@@ -1,5 +1,6 @@
 package fr.alma.middleware.view;
 
+import java.util.List;
 import java.util.Optional;
 
 import javafx.application.Application;
@@ -35,9 +36,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
-
-import com.sun.xml.internal.ws.wsdl.writer.document.Service;
-
 import fr.alma.middleware.controller.ClientController;
 
 
@@ -52,6 +50,7 @@ public class ClientView extends Application{
 	private Button refresh;
 	private Button newTopic;
 	private Stage primaryStage;
+	private ObservableList<String> items;
 
 	public Parent createContent(){
 
@@ -87,6 +86,13 @@ public class ClientView extends Application{
 		//Open the first topic in the list of subscribing
 		//textArea = new TextArea(controller.getLogsContent(firstSubcriptionTopic));
 
+		
+
+		return mainBox;
+	}
+
+	
+	public void createListener(){
 		newTopic.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -156,10 +162,8 @@ public class ClientView extends Application{
 
 		
 		listView.setContextMenu(contextMenu);
-
-		return mainBox;
 	}
-
+	
 
 	public void showTopicsBox(){
 
@@ -208,11 +212,20 @@ public class ClientView extends Application{
 
 	public void refreshTopics(){
 		//Retrieve all the topics already created
-		ObservableList<String> items =FXCollections.observableArrayList (controller.getExistingTopics());
+		items =FXCollections.observableArrayList (controller.getExistingTopics());
 		listView.setItems(items);
 	}
 
-
+	public void colorOnSubscribe(){
+		for(int i = 0; i < controller.getTopicListSize(); i++){
+			List<String> subList = controller.getSubcriptionsList();
+			String topic = controller.getExistingTopics().get(i);
+			if(subList.contains(topic)){
+				//Add specific color for a subscribed topic
+				//listView.getItems().get(i).
+			}
+		}
+	}
 
 	public void dialogBox(){
 		// Create the custom dialog.
