@@ -6,6 +6,7 @@ import java.rmi.registry.LocateRegistry;
 import java.util.Date;
 import java.util.List;
 
+import javafx.application.Platform;
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
@@ -62,6 +63,10 @@ public class ClientController{
 
 	}
 
+	public int getTopicListSize(){
+		return this.topicList.size();
+	}
+	
 	public List<String> getExistingTopics() {
 		//some stuff
 		List<String> list = null;
@@ -105,12 +110,29 @@ public class ClientController{
 
 	
 	public void write(String message, String name){
+		System.out.println(message);
 		try {
 			interfaceSujetDiscussion.diffuse(
 			"["+ new Date().toString() +"]" + "<" + name + "<" + message
 			);
 		} catch (RemoteException e) {
 			e.printStackTrace();
+		}
+	}
+
+
+
+	public String getName() {
+		return "Name";
+	}
+
+
+
+	public boolean isSubscribeOn(String selectedItem) {
+		if(topicList.contains(selectedItem)){
+			return true;
+		}else{
+			return false;
 		}
 	}
 
