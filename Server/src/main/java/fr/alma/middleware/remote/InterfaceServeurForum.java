@@ -5,8 +5,6 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.List;
 
-import fr.alma.middleware.data.Topic;
-
 public interface InterfaceServeurForum extends Remote {
 
 	public InterfaceSujetDiscussion obtientSujet(String titre)throws RemoteException;

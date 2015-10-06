@@ -5,14 +5,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.Serializable;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
 import java.util.Set;
 
 import fr.alma.middleware.remote.InterfaceAffichageClient;
-import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
 /* Plusieurs solutions pour la persistence:
  * 
@@ -20,7 +16,7 @@ import fr.alma.middleware.remote.InterfaceSujetDiscussion;
  *		
  */
 
-public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussion, Serializable{
+public class Topic {
 
 
 	private String name;
@@ -34,7 +30,7 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 		this.file = new File("logs/" + name + ".logs");
 
 		try {
-			fichier = new BufferedWriter(new FileWriter(name + ".logs"));
+			fichier = new BufferedWriter(new FileWriter("logs/" + name + ".logs"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -89,35 +85,6 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 	}
 
 
-	@Override
-	public void inscription(InterfaceAffichageClient c) throws RemoteException {
-		if(!clientList.contains(c)){
-			clientList.add((Client)c);
-		}
-	}
-
-
-	@Override
-	public void desInscription(InterfaceAffichageClient c)
-			throws RemoteException {
-		if(clientList.contains(c)){
-			clientList.remove(c);
-		}
-	}
-
-
-	@Override
-	public void diffuse(String message) throws RemoteException {
-		synchronized(message){
-			try {
-				fichier.write(message);
-				fichier.newLine();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-
+	
 
 }

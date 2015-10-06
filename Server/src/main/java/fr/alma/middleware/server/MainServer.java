@@ -21,17 +21,10 @@ public class MainServer{
 
 	protected MainServer() throws RemoteException {
 		super();
-		topicList = new ArrayList<Topic>();
 		this.isf = new ServerForum();
 		this.iac = new ServerAfficheClient();
-		try {
-			((ServerForum) isf).addTopic(new Topic("Sport"));
-			((ServerForum) isf).addTopic(new Topic("Musique"));
-			((ServerForum) isf).addTopic(new Topic("Cinema"));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		this.isd = new ServerSujetDiscussion();
+		
 		
 	}
     

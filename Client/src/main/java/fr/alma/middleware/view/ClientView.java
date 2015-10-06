@@ -4,16 +4,20 @@ import java.util.Optional;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
@@ -21,6 +25,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -33,17 +38,38 @@ public class ClientView extends Application{
 	private Tab newTab;
 	private ClientController controller;
 	private TextArea textArea;
+	private TextField textField;
+	private ListView<String> listView;
+	private Button refresh;
 	
 	
 	public Parent createContent(){
 		
+		VBox mainBox = new VBox();
+		HBox centerBox = new HBox();
+		VBox leftBox = new VBox();
+		VBox rightBox = new VBox();
+		
+		textArea = new TextArea();
+		textField = new TextField();
+		listView = new ListView<>();
+		refresh = new Button("Refresh");
 		tabPane = new TabPane();
-		Tab tab1 = new Tab("Sport");
-		Tab tab2 = new Tab("Musique");
-		Tab tab3 = new Tab("Cinéma");
 		newTab = new Tab();
 		newTab.setClosable(false);
+		tabPane.getTabs().add(newTab);
 		
+		ObservableList<String> items =FXCollections.observableArrayList (controller.getExistingTopics());
+		listView.setItems(items);
+		
+		leftBox.getChildren().addAll(textArea, textField);
+		rightBox.getChildren().addAll(listView, refresh);
+		
+		
+		
+		centerBox.getChildren().addAll(leftBox, rightBox);
+		
+		mainBox.getChildren().addAll(tabPane, centerBox);
 		//String firstSubcriptionTopic = controller.getSubcriptionByIndex(0);
 		
 		//Open the first topic in the list of subscribing
@@ -61,13 +87,18 @@ public class ClientView extends Application{
 			}
 		});
 		
-		tabPane.getTabs().add(newTab);
 		
 		
 		
-		return tabPane;
+		
+		
+		return mainBox;
 	}
 
+	
+	public void showTopicsBox(){
+		
+	}
 	
 	//If the topic is not already create 
 		//create the topic (on the server) and redirect the user into it
@@ -170,7 +201,7 @@ public class ClientView extends Application{
 	public void start(Stage primaryStage) {
 		try {
             controller = new ClientController();
-    		refreshTopics();
+    		//refreshTopics();
     		dialogBox();
             primaryStage.setScene(new Scene(createContent()));
             primaryStage.show();

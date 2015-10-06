@@ -14,12 +14,16 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 
 	protected ServerForum() throws RemoteException {
 		super();
-		// TODO Auto-generated constructor stub
+		
+		try {
+			this.list.add(new Topic("Musique"));
+			this.list.add(new Topic("Cinema"));
+			this.list.add(new Topic("Sport"));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private List<Topic> list = new ArrayList<Topic>();
 	
@@ -41,7 +45,8 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 	public List<String> getTopicsTitle() throws RemoteException {
 		List<String> topicsTitle = new ArrayList<String>();
 		for(int i = 0; i < list.size(); i++){
-			topicsTitle.add(list.get(i).toString());
+			topicsTitle.add(list.get(i).getName());
+			System.out.println(list.get(i));
 		}
 		
 		return topicsTitle;
