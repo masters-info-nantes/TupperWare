@@ -35,9 +35,22 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 	}
 
 	@Override
-	public void proposeSujet(String titre, InterfaceSujetDiscussion sujet)
+	public void proposeSujet(String titre)
 			throws RemoteException {
-		// TODO Auto-generated method stub
+		if(this.list.contains(titre))
+        {
+            throw new RemoteException();
+        }
+        else
+        {
+            try{
+                this.list.add(new Topic(titre));
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
 
 	}
 
