@@ -3,10 +3,10 @@ package fr.alma.middleware.controller;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javafx.application.Platform;
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
@@ -14,6 +14,12 @@ import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
 public class ClientController{
 
+	
+	private Calendar calendar = Calendar.getInstance();
+	
+	private int hours = calendar.get(Calendar.HOUR_OF_DAY);
+	private int minutes = calendar.get(Calendar.MINUTE);
+	
 	private InterfaceServeurForum interfaceServerForum;
 	private InterfaceAffichageClient interfaceAffichageClient;
 	private InterfaceSujetDiscussion interfaceSujetDiscussion;
@@ -21,10 +27,13 @@ public class ClientController{
 	private List<String> topicList;
 	private List<String> subscriptionsList;
 	private int currentTab;
+	private String username;
 
 	public ClientController(){
 		this.currentTab = 0;
+		calendar.setTime(new Date());
 		this.connect();
+		
 		
 	}
 
@@ -109,11 +118,12 @@ public class ClientController{
 	}
 
 	
-	public void write(String message, String name){
-		System.out.println(message);
+	public void write(String message){
+		System.out.println("["+ hours + ":" + minutes +"]" + " <" + this.username + "> : " + message
+			);
 		try {
 			interfaceSujetDiscussion.diffuse(
-			"["+ new Date().toString() +"]" + "<" + name + "<" + message
+			"["+ hours + ":" + minutes +"]" + " <" + this.username + "> " + message
 			);
 		} catch (RemoteException e) {
 			e.printStackTrace();
@@ -123,7 +133,7 @@ public class ClientController{
 
 
 	public String getName() {
-		return "Name";
+		return username;
 	}
 
 
@@ -134,6 +144,12 @@ public class ClientController{
 		}else{
 			return false;
 		}
+	}
+
+
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 }

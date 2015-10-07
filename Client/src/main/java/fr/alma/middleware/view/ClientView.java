@@ -2,6 +2,8 @@ package fr.alma.middleware.view;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.FutureTask;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -86,12 +88,12 @@ public class ClientView extends Application{
 		//Open the first topic in the list of subscribing
 		//textArea = new TextArea(controller.getLogsContent(firstSubcriptionTopic));
 
-		
+		createListener();
 
 		return mainBox;
 	}
 
-	
+
 	public void createListener(){
 		newTopic.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -115,7 +117,7 @@ public class ClientView extends Application{
 			@Override
 			public void handle(KeyEvent ke) {
 				if(ke.getCode() == KeyCode.ENTER){
-					controller.write(textField.getText(), controller.getName());
+					controller.write(textField.getText());
 					textField.setText("");
 				}
 
@@ -123,21 +125,18 @@ public class ClientView extends Application{
 		});
 
 
-		final ContextMenu contextMenu = new ContextMenu();
 
-		MenuItem subscribe = new MenuItem("Subscribe");
-		MenuItem unSubscribe = new MenuItem("Unsubscribe");
-		
+
 		/*subscribe.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.subscribe()
 			}
 		});*/
-		
+
 		/*unSubscribe.setOnAction(new EventHandler<ActionEvent>() {
-			
+
 			@Override
 			public void handle(ActionEvent arg0) {
 				controller.unSubscribe()
@@ -151,19 +150,31 @@ public class ClientView extends Application{
 			public void handle(MouseEvent event) {
 				if(event.getButton() == MouseButton.SECONDARY){
 					System.out.println("S'abonner à " + listView.getSelectionModel().getSelectedItem());
-					if(controller.isSubscribeOn(listView.getSelectionModel().getSelectedItem())){
-						contextMenu.getItems().add(unSubscribe);
-					}else{
-						contextMenu.getItems().add(subscribe);
-					}
+					/*final FutureTask ft = new FutureTask(new Callable() {
+
+						@Override
+						public Object call() throws Exception {
+							return checkSubscription();
+						}
+					});
+					Platform.runLater(ft);*/
+
+					Thread t = new Thread(new Runnable() {
+						public void run()
+						{
+							checkSubscription();
+						}
+					});
+
+
 				}
 			}
 		});
 
-		
-		listView.setContextMenu(contextMenu);
+
+
 	}
-	
+
 
 	public void showTopicsBox(){
 
@@ -174,8 +185,22 @@ public class ClientView extends Application{
 
 		listView.getSelectionModel().select(editableRow);*/
 
-
 	}
+
+	public void checkSubscription(){
+		final ContextMenu contextMenu = new ContextMenu();
+
+		MenuItem subscribe = new MenuItem("Subscribe");
+		MenuItem unSubscribe = new MenuItem("Unsubscribe");
+		if(controller.isSubscribeOn(listView.getSelectionModel().getSelectedItem())){
+			contextMenu.getItems().add(unSubscribe);
+		}else{
+			contextMenu.getItems().add(subscribe);
+		}
+
+		listView.setContextMenu(contextMenu);
+	}
+
 
 	//If the topic is not already create 
 	//create the topic (on the server) and redirect the user into it
@@ -282,6 +307,8 @@ public class ClientView extends Application{
 		result.ifPresent(usernamePassword -> {
 			System.out.println("Username=" + usernamePassword.getKey() + ", Password=" + usernamePassword.getValue());
 		});
+
+		controller.setUsername(username.getText());
 	}
 
 	@Override
