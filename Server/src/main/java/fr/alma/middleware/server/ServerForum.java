@@ -30,7 +30,6 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 	@Override
 	public InterfaceSujetDiscussion obtientSujet(String titre)
 			throws RemoteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
