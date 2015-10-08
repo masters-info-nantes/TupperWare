@@ -97,7 +97,7 @@ public class ClientController{
 	public String getLogsContent(String logsFile){
 		String logs = "";
 		try {
-			logs = interfaceAffichageClient.getLogsContent(logsFile);
+			logs = interfaceServerForum.getTopicContent(logsFile);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

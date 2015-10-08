@@ -26,16 +26,10 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 
 	private static final long serialVersionUID = 1L;
 	private List<Topic> list = new ArrayList<Topic>();
-	
-	@Override
-	public InterfaceSujetDiscussion obtientSujet(String titre)
-			throws RemoteException {
-		return null;
-	}
 
 	@Override
 	public void proposeSujet(String titre)
-			throws RemoteException {
+			throws Exception {
 		if(this.list.contains(titre))
         {
             throw new Exception("Topic already exists");
@@ -65,12 +59,13 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 	}
 
 	@Override
-	public List<String> getUsersList(String topic) throws RemoteException {
+	public List<String> getUsersList(String topic) throws Exception {
         List localList = new ArrayList();
 		for(int i = 0; i < list.size(); i++){
             if(list.get(i).getName().equals(topic))
             {
-                return localList.addAll(list.get(i).getClientList());
+                localList.addAll(list.get(i).getClientList());
+                return localList;
             }
         }
 		throw new Exception("Topic doesn't exist");
@@ -80,15 +75,14 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 		list.add(t);
 	}
     
-    public String getTopicContent(String topic) throws RemoteException {
+    public String getTopicContent(String topic) throws Exception {
 		for(int i = 0; i < list.size(); i++){
             if(list.get(i).getName().equals(topic))
             {
-                return list.getLogsContent();
+                return list.get(i).getLogsContent();
             }
         }
 		throw new Exception("Topic doesn't exist");
-        
     }
 
 

@@ -8,9 +8,9 @@ import java.util.List;
 public interface InterfaceServeurForum extends Remote {
 
 	public List<String> getTopicsTitle() throws RemoteException;
-	public String getTopicContent(String topic) throws RemoteException;
-	public List<String> getUsersList(String topic) throws RemoteException;
-	public void proposeSujet(String titre) throws RemoteException;
+	public String getTopicContent(String topic) throws Exception;
+	public List<String> getUsersList(String topic) throws Exception;
+	public void proposeSujet(String titre) throws Exception;
 
 }
 

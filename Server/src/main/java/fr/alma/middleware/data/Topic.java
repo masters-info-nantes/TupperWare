@@ -95,33 +95,24 @@ public class Topic {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			try {
-				if (reader != null)closeLogsFile();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+            if (reader != null)closeLogsFile();
 		}
 	}
     
-    public String getLogsContent() throws RemoteException {
-
-		try {
-            String result = "";
+    public String getLogsContent(){
+        String result = "";
+		try { 
 			String sCurrentLine;
 
 			while ((sCurrentLine = reader.readLine()) != null) {
 				System.out.println(sCurrentLine);
-                result += sCurrentLine();
+                result += sCurrentLine;
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (reader != null)closeLogsFile();
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
+            if (reader != null)closeLogsFile();
 		}
 		return result;
 	}
