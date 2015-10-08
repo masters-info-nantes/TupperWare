@@ -2,13 +2,12 @@ package fr.alma.middleware.view;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -53,6 +52,9 @@ public class ClientView extends Application{
 	private Button newTopic;
 	private Stage primaryStage;
 	private ObservableList<String> items;
+	
+	private MenuItem subscribe;
+	private MenuItem unSubscribe;
 
 	public Parent createContent(){
 
@@ -150,28 +152,13 @@ public class ClientView extends Application{
 			public void handle(MouseEvent event) {
 				if(event.getButton() == MouseButton.SECONDARY){
 					System.out.println("S'abonner à " + listView.getSelectionModel().getSelectedItem());
-					/*final FutureTask ft = new FutureTask(new Callable() {
-
-						@Override
-						public Object call() throws Exception {
-							return checkSubscription();
-						}
-					});
-					Platform.runLater(ft);*/
-
-					Thread t = new Thread(new Runnable() {
-						public void run()
-						{
-							checkSubscription();
-						}
-					});
-
+					checkSubscription();
 
 				}
 			}
 		});
 
-
+		test();
 
 	}
 
@@ -187,11 +174,16 @@ public class ClientView extends Application{
 
 	}
 
-	public void checkSubscription(){
+	public void test(){
+		Thread t = new Thread(checkSubscription());
+		t.start();
+	}
+	
+	private Runnable checkSubscription(){
 		final ContextMenu contextMenu = new ContextMenu();
 
-		MenuItem subscribe = new MenuItem("Subscribe");
-		MenuItem unSubscribe = new MenuItem("Unsubscribe");
+		subscribe = new MenuItem("Subscribe");
+		unSubscribe = new MenuItem("Unsubscribe");
 		if(controller.isSubscribeOn(listView.getSelectionModel().getSelectedItem())){
 			contextMenu.getItems().add(unSubscribe);
 		}else{
@@ -199,6 +191,8 @@ public class ClientView extends Application{
 		}
 
 		listView.setContextMenu(contextMenu);
+		System.out.println("Check subscription");
+		return null;
 	}
 
 
