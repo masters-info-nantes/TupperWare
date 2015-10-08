@@ -38,12 +38,12 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 			throws RemoteException {
 		if(this.list.contains(titre))
         {
-            throw new RemoteException();
+            throw new Exception("Topic already exists");
         }
         else
         {
             try{
-                this.list.add(new Topic(titre));
+                this.addTopic(new Topic(titre));
             }
             catch(Exception e)
             {
@@ -66,12 +66,30 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 
 	@Override
 	public List<String> getUsersList(String topic) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+        List localList = new ArrayList();
+		for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getName().equals(topic))
+            {
+                return localList.addAll(list.get(i).getClientList());
+            }
+        }
+		throw new Exception("Topic doesn't exist");
 	}
 	
 	public void addTopic(Topic t){
 		list.add(t);
 	}
+    
+    public String getTopicContent(String topic) throws RemoteException {
+		for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getName().equals(topic))
+            {
+                return list.getLogsContent();
+            }
+        }
+		throw new Exception("Topic doesn't exist");
+        
+    }
+
 
 }

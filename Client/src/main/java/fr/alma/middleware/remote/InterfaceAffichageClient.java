@@ -9,6 +9,4 @@ public interface InterfaceAffichageClient extends Remote {
 	
 	public void affiche(String Message) throws RemoteException;
 	
-	public String getLogsContent(String logsFile) throws RemoteException;
-	
 }

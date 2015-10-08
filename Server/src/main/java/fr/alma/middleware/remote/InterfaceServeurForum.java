@@ -7,16 +7,10 @@ import java.util.List;
 
 public interface InterfaceServeurForum extends Remote {
 
-	public InterfaceSujetDiscussion obtientSujet(String titre)throws RemoteException;
-
 	public List<String> getTopicsTitle() throws RemoteException;
+	public String getTopicContent(String topic) throws RemoteException;
 	public List<String> getUsersList(String topic) throws RemoteException;
-	
 	public void proposeSujet(String titre) throws RemoteException;
-
-
-	
-
 
 }
 

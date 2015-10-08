@@ -4,6 +4,8 @@ package fr.alma.middleware.data;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,7 +23,8 @@ public class Topic {
 
 	private String name;
 	private Set<Client> clientList;
-	private BufferedWriter fichier;
+	private BufferedWriter writer;
+	private BufferedReader reader;
 	private File file;
 
 	public Topic(String name) throws Exception{
@@ -41,7 +44,8 @@ public class Topic {
 		this.file = new File("logs/" + name + ".logs");
 
 		try {
-			fichier = new BufferedWriter(new FileWriter("logs/" + name + ".logs"));
+			writer = new BufferedWriter(new FileWriter("logs/" + name + ".logs"));
+			reader = new BufferedReader(new FileReader("logs/" + name + ".logs"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,18 +89,47 @@ public class Topic {
 
 	public synchronized void writeLineInFile(String m){
 		try {
-			fichier.write(m);
-			fichier.newLine();
+			writer.write(m);
+			writer.newLine();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			try {
+				if (reader != null)closeLogsFile();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
+    
+    public String getLogsContent() throws RemoteException {
 
+		try {
+            String result = "";
+			String sCurrentLine;
+
+			while ((sCurrentLine = reader.readLine()) != null) {
+				System.out.println(sCurrentLine);
+                result += sCurrentLine();
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (reader != null)closeLogsFile();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return result;
+	}
 
 	public void closeLogsFile(){
 		try {
-			fichier.close();
+			reader.close();
+			writer.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
