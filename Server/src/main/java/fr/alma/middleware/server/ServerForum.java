@@ -58,7 +58,7 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 		List<String> topicsTitle = new ArrayList<String>();
 		for(int i = 0; i < list.size(); i++){
 			topicsTitle.add(list.get(i).getName());
-			System.out.println(list.get(i));
+			System.out.println(list.get(i).getName());
 		}
 		
 		return topicsTitle;
