@@ -3,16 +3,12 @@ package fr.alma.middleware.controller;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
-import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
 
 public class ClientController{
@@ -28,13 +24,13 @@ public class ClientController{
 
 	private List<String> topicList;
 	private List<String> subscriptionsList;
-	private String currentTopic;
 	private String username;
+	private String currentTopicName;
 
 	public ClientController(){
 		calendar.setTime(new Date());
-		topicList = new ArrayList<String>();
 		this.connect();
+		topicList = getExistingTopics();
 
 
 	}
@@ -67,7 +63,6 @@ public class ClientController{
 	}
 
 	public void joinTopic(){
-
 	}
 
 	public int getTopicListSize(){
@@ -102,8 +97,8 @@ public class ClientController{
 		return logs;
 	}
 
-	public String getCurrentTopic(){
-		return this.currentTopic;
+	public String getCurrentTopicName(){
+		return this.currentTopicName;
 	}
 
 	public List<String> getSubcriptionsList(){
@@ -116,11 +111,11 @@ public class ClientController{
 	}
 
 
-	public void write(String message){
+	public void write(String message, String topicName){
 		System.out.println("["+ hours + ":" + minutes +"]" + " <" + this.username + "> : " + message
 				);
 		try {
-			interfaceServerForum.obtientSujet(currentTopic).diffuse(
+			interfaceServerForum.obtientSujet(currentTopicName).diffuse(
 					"["+ hours + ":" + minutes +"]" + " <" + this.username + "> " + message
 					);
 		} catch (RemoteException e) {
@@ -150,5 +145,32 @@ public class ClientController{
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
+
+
+	public void subscribe() {
+		try {
+			interfaceServerForum.obtientSujet(currentTopicName).inscription(interfaceAffichageClient);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
+
+	public void unSubscribe() throws RemoteException {
+		interfaceServerForum.obtientSujet(currentTopicName).desInscription(interfaceAffichageClient);
+	}
+
+
+
+	public void setCurrentTopic(String topicName) {
+		this.currentTopicName = topicName;
+	}
+
+
+
 
 }

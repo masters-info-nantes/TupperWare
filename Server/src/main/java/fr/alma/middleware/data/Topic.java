@@ -91,6 +91,7 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 		try {
 			fichier.write(m);
 			fichier.newLine();
+			fichier.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -108,20 +109,21 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 	}
 
 	@Override
-	public void inscription(InterfaceAffichageClient c, String topicName) throws RemoteException {
+	public void inscription(InterfaceAffichageClient c) throws RemoteException {
 		// TODO Auto-generated method stub
 		this.addClient((Client)c);
 	}
 
 	@Override
-	public void desInscription(InterfaceAffichageClient c, String topicName) throws RemoteException {
+	public void desInscription(InterfaceAffichageClient c) throws RemoteException {
 		// TODO Auto-generated method stub
 		this.removeClient((Client)c);
 	}
 
 	@Override
-	public void diffuse(String message, String topicName) throws RemoteException {
+	public void diffuse(String message) throws RemoteException {
 		this.writeLineInFile(message);
+		System.out.println(message);
 		
 	}
 

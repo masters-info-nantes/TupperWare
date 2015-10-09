@@ -31,7 +31,14 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 	@Override
 	public InterfaceSujetDiscussion obtientSujet(String titre)
 			throws RemoteException {
-		return null;
+		for(Topic t : this.list)
+		{
+			if(t.getName().equals(titre))
+			{
+				return t;
+			}
+		}
+		throw new RemoteException();
 	}
 
 	@Override
