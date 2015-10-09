@@ -172,8 +172,6 @@ public class ClientView extends Application{
 
 	private void checkSubscription(){
 
-
-
 		String item = listView.getSelectionModel().getSelectedItem();
 		if(controller.isSubscribeOn(item)){
 			System.out.println("Subscription");

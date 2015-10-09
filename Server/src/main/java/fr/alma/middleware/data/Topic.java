@@ -10,8 +10,9 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
-import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.rmi.RemoteException;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -151,6 +152,7 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 	@Override
 	public void diffuse(String message) throws RemoteException {
 		this.writeLineInFile(message);
+        System.out.println("Diffusé à: "+this.getClientList().size()+" client");
 		for(InterfaceAffichageClient c : this.getClientList())
 		{
 			c.affiche(message,this.name);

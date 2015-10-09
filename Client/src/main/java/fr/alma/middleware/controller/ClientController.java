@@ -6,12 +6,16 @@ import java.rmi.registry.LocateRegistry;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
+import java.io.Serializable;
+import java.rmi.server.UnicastRemoteObject;
+
 
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 
 
-public class ClientController implements InterfaceAffichageClient{
+public class ClientController extends UnicastRemoteObject implements InterfaceAffichageClient, Serializable {
 
 
 	private Calendar calendar = Calendar.getInstance();
@@ -27,7 +31,7 @@ public class ClientController implements InterfaceAffichageClient{
 	private String username;
 	private String currentTopicName;
 
-	public ClientController(){
+	public ClientController() throws Exception{
 		calendar.setTime(new Date());
 		this.connect();
 		topicList = getExistingTopics();
@@ -50,6 +54,7 @@ public class ClientController implements InterfaceAffichageClient{
 			interfaceServerForum = (InterfaceServeurForum) LocateRegistry.getRegistry(1024).lookup("forum");
 			//interfaceAffichageClient = (InterfaceAffichageClient) LocateRegistry.getRegistry(1024).lookup("affichage");
 			topicList = interfaceServerForum.getTopicsTitle();
+            subscriptionsList = new ArrayList<String>();
 			//interfaceAffichageClient = (InterfaceAffichageClient) registry.lookup("affichage");
 
 		} catch (RemoteException | NotBoundException e) {
@@ -133,7 +138,10 @@ public class ClientController implements InterfaceAffichageClient{
 
 
 	public boolean isSubscribeOn(String selectedItem) {
-		if(topicList.contains(selectedItem)){
+		if(!subscriptionsList.contains(selectedItem)){
+            currentTopicName = selectedItem;
+            System.out.println("SUBSCRIBTION:"+selectedItem);
+            subscribe();
 			return true;	
 		}else{
 			return false;
@@ -151,7 +159,7 @@ public class ClientController implements InterfaceAffichageClient{
 
 	public void subscribe() {
 		try {
-			interfaceServerForum.obtientSujet(currentTopicName).inscription(interfaceAffichageClient);
+			interfaceServerForum.obtientSujet(currentTopicName).inscription(this);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -162,7 +170,7 @@ public class ClientController implements InterfaceAffichageClient{
 
 
 	public void unSubscribe() throws RemoteException {
-		interfaceServerForum.obtientSujet(currentTopicName).desInscription(interfaceAffichageClient);
+		interfaceServerForum.obtientSujet(currentTopicName).desInscription(this);
 	}
 
 
