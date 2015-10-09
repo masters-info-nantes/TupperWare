@@ -16,15 +16,11 @@ public class MainServer{
 
 	private InterfaceServeurForum isf;
 	private InterfaceAffichageClient iac;
-	private InterfaceSujetDiscussion isd;
 	private List<Topic> topicList;
 
 	protected MainServer() throws RemoteException {
 		super();
 		this.isf = new ServerForum();
-		this.isd = new ServerSujetDiscussion();
-		
-		
 	}
     
     public InterfaceServeurForum getIsf()
@@ -37,13 +33,7 @@ public class MainServer{
         return iac;
     }
     
-    public InterfaceSujetDiscussion getIsd()
-    {
-        return isd;
-    }
         
-
-
 
 	public static void main(String[] args) {
 		System.out.println("HELLO WORLD !");
@@ -59,7 +49,7 @@ public class MainServer{
 			Registry registry =  LocateRegistry.createRegistry(port);
 			MainServer obj = new MainServer();
 			registry.rebind("forum", obj.getIsf());
-			registry.rebind("sujet", obj.getIsd());
+
 			
 			System.out.println("Serveur lancé à l'adresse "+ip_adress + ":" + port);
 		} catch (Exception e) {

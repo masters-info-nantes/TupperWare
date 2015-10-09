@@ -6,7 +6,9 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.alma.middleware.data.Client;
 import fr.alma.middleware.data.Topic;
+import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
@@ -26,6 +28,19 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 
 	private static final long serialVersionUID = 1L;
 	private List<Topic> list = new ArrayList<Topic>();
+
+	@Override
+	public InterfaceSujetDiscussion obtientSujet(String titre)
+			throws RemoteException {
+		for(Topic t : this.list)
+		{
+			if(t.getName().equals(titre))
+			{
+				return t;
+			}
+		}
+		throw new RemoteException();
+	}
 
 	@Override
 	public void proposeSujet(String titre)

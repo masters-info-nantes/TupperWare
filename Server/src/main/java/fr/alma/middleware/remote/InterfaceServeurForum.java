@@ -11,6 +11,8 @@ public interface InterfaceServeurForum extends Remote {
 	public String getTopicContent(String topic) throws Exception;
 	public List<String> getUsersList(String topic) throws Exception;
 	public void proposeSujet(String titre) throws Exception;
+    public InterfaceSujetDiscussion obtientSujet(String titre) throws RemoteException;
+
 
 }
 

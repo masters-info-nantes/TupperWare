@@ -2,11 +2,11 @@ package fr.alma.middleware.view;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.Callable;
-import java.util.concurrent.FutureTask;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,15 +18,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -44,15 +43,14 @@ import fr.alma.middleware.controller.ClientController;
 public class ClientView extends Application{
 
 	private TabPane tabPane;
-	private Tab newTab;
 	private ClientController controller;
 	private TextArea textArea;
 	private TextField textField;
 	private ListView<String> listView;
 	private Button refresh;
 	private Button newTopic;
-	private Stage primaryStage;
 	private ObservableList<String> items;
+
 
 	public Parent createContent(){
 
@@ -62,6 +60,8 @@ public class ClientView extends Application{
 		VBox rightBox = new VBox();
 		HBox bottomRightBox = new HBox();
 
+
+
 		textArea = new TextArea();
 		textArea.setEditable(false);
 		textField = new TextField();
@@ -69,14 +69,12 @@ public class ClientView extends Application{
 		refresh = new Button("Refresh");
 		newTopic = new Button("New Topic");
 		tabPane = new TabPane();
-		newTab = new Tab();
-		newTab.setClosable(false);
-		tabPane.getTabs().add(newTab);
-
+		tabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE);
 
 		leftBox.getChildren().addAll(textArea, textField);
-		rightBox.getChildren().addAll(listView, bottomRightBox);
 		bottomRightBox.getChildren().addAll(refresh, newTopic);
+		rightBox.getChildren().addAll(listView, bottomRightBox);
+		
 
 
 
@@ -94,7 +92,7 @@ public class ClientView extends Application{
 	}
 
 
-	public void createListener(){
+	public <T> void createListener(){
 		newTopic.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -116,8 +114,11 @@ public class ClientView extends Application{
 
 			@Override
 			public void handle(KeyEvent ke) {
+
 				if(ke.getCode() == KeyCode.ENTER){
-					controller.write(textField.getText());
+					String topicName =	tabPane.getSelectionModel().getSelectedItem().getText();
+					//controller.setCurrentTopic(topicName);
+					controller.write(textField.getText(), topicName);
 					textField.setText("");
 				}
 
@@ -126,53 +127,33 @@ public class ClientView extends Application{
 
 
 
-
-		/*subscribe.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				controller.subscribe()
-			}
-		});*/
-
-		/*unSubscribe.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				controller.unSubscribe()
-			}
-		});*/
-
-
 		listView.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(MouseEvent event) {
-				if(event.getButton() == MouseButton.SECONDARY){
-					System.out.println("S'abonner à " + listView.getSelectionModel().getSelectedItem());
-					/*final FutureTask ft = new FutureTask(new Callable() {
-
-						@Override
-						public Object call() throws Exception {
-							return checkSubscription();
-						}
-					});
-					Platform.runLater(ft);*/
-
-					Thread t = new Thread(new Runnable() {
-						public void run()
-						{
-							checkSubscription();
-						}
-					});
-
+				if(event.getButton() == MouseButton.PRIMARY){
+					if(event.getClickCount() == 2){
+						checkSubscription();
+					}
 
 				}
 			}
 		});
 
+		tabPane.getSelectionModel().selectedItemProperty().addListener(
+				new ChangeListener<Tab>() {
 
-
+					@Override
+					public void changed(ObservableValue<? extends Tab> ov,
+							Tab t1, Tab t2) {
+						String tabName = tabPane.getSelectionModel().getSelectedItem().getText();
+						textArea.setText(controller.getLogsContent(tabName));
+						System.out.println("Tab changed " + tabPane.getSelectionModel().getSelectedItem().getText());
+						
+					}
+					
+				});
+		
 	}
 
 
@@ -187,19 +168,26 @@ public class ClientView extends Application{
 
 	}
 
-	public void checkSubscription(){
-		final ContextMenu contextMenu = new ContextMenu();
 
-		MenuItem subscribe = new MenuItem("Subscribe");
-		MenuItem unSubscribe = new MenuItem("Unsubscribe");
-		if(controller.isSubscribeOn(listView.getSelectionModel().getSelectedItem())){
-			contextMenu.getItems().add(unSubscribe);
+
+	private void checkSubscription(){
+
+
+
+		String item = listView.getSelectionModel().getSelectedItem();
+		if(controller.isSubscribeOn(item)){
+			System.out.println("Subscription");
+			Tab newTab;
+			tabPane.getTabs().add(newTab = new Tab(item.toString()));
+			tabPane.getSelectionModel().select(newTab);
+
 		}else{
-			contextMenu.getItems().add(subscribe);
+			tabPane.getTabs().remove(item);
 		}
 
-		listView.setContextMenu(contextMenu);
+
 	}
+
 
 
 	//If the topic is not already create 
@@ -314,7 +302,6 @@ public class ClientView extends Application{
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			this.primaryStage = primaryStage;
 			controller = new ClientController();
 			dialogBox();
 			primaryStage.setScene(new Scene(createContent()));

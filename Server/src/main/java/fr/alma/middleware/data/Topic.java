@@ -1,16 +1,22 @@
 package fr.alma.middleware.data;
 
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
 import java.util.Set;
 
 import fr.alma.middleware.remote.InterfaceAffichageClient;
+import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
 /* Plusieurs solutions pour la persistence:
  * 
@@ -18,18 +24,20 @@ import fr.alma.middleware.remote.InterfaceAffichageClient;
  *		
  */
 
-public class Topic {
+public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussion, Serializable {
 
 
 	private String name;
-	private Set<Client> clientList;
+
 	private BufferedWriter writer;
 	private BufferedReader reader;
+	private Set<InterfaceAffichageClient> clientList;
+
 	private File file;
 
 	public Topic(String name) throws Exception{
 		this.name = name;
-		this.clientList = new HashSet<Client>();
+		this.clientList = new HashSet<InterfaceAffichageClient>();
         //Check if the log directory is present, if not, create it
         File dir = new File("logs");
         if (!dir.exists()) {
@@ -66,11 +74,11 @@ public class Topic {
 	}
 
 
-	public Set<Client> getClientList(){
+	public Set<InterfaceAffichageClient> getClientList(){
 		return clientList;
 	}
 
-	public boolean addClient(Client c){
+	public boolean addClient(InterfaceAffichageClient c){
 		if(!clientList.contains(c)){
 			clientList.add(c);
 			return true;
@@ -91,11 +99,12 @@ public class Topic {
 		try {
 			writer.write(m);
 			writer.newLine();
+			writer.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-            if (reader != null)closeLogsFile();
+            //if (reader != null)closeLogsFile();
 		}
 	}
     
@@ -112,7 +121,7 @@ public class Topic {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-            if (reader != null)closeLogsFile();
+            //if (reader != null)closeLogsFile();
 		}
 		return result;
 	}
@@ -125,6 +134,29 @@ public class Topic {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void inscription(InterfaceAffichageClient c) throws RemoteException {
+		// TODO Auto-generated method stub
+		this.addClient(c);
+	}
+
+	@Override
+	public void desInscription(InterfaceAffichageClient c) throws RemoteException {
+		// TODO Auto-generated method stub
+		this.removeClient(c);
+	}
+
+	@Override
+	public void diffuse(String message) throws RemoteException {
+		this.writeLineInFile(message);
+		for(InterfaceAffichageClient c : this.getClientList())
+		{
+			c.affiche(message,this.name);
+		}
+		System.out.println(message);
+		
 	}
 
 
