@@ -30,14 +30,26 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 	@Override
 	public InterfaceSujetDiscussion obtientSujet(String titre)
 			throws RemoteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void proposeSujet(String titre, InterfaceSujetDiscussion sujet)
+	public void proposeSujet(String titre)
 			throws RemoteException {
-		// TODO Auto-generated method stub
+		if(this.list.contains(titre))
+        {
+            throw new RemoteException();
+        }
+        else
+        {
+            try{
+                this.list.add(new Topic(titre));
+            }
+            catch(Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
 
 	}
 
@@ -46,7 +58,7 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 		List<String> topicsTitle = new ArrayList<String>();
 		for(int i = 0; i < list.size(); i++){
 			topicsTitle.add(list.get(i).getName());
-			System.out.println(list.get(i));
+			System.out.println(list.get(i).getName());
 		}
 		
 		return topicsTitle;

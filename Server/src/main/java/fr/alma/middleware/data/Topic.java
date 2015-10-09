@@ -47,6 +47,14 @@ public class Topic {
 			e.printStackTrace();
 		}
 	}
+    
+    //Needed for the list.contains method
+    public boolean equals(Topic obj)
+    {
+        if(obj.name.equals(this.name))
+           return true;
+        return false;
+    }
 
 
 	public String getName(){
