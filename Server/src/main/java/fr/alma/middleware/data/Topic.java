@@ -5,10 +5,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
 import java.util.Set;
 
 import fr.alma.middleware.remote.InterfaceAffichageClient;
+import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
 /* Plusieurs solutions pour la persistence:
  * 
@@ -16,7 +20,7 @@ import fr.alma.middleware.remote.InterfaceAffichageClient;
  *		
  */
 
-public class Topic {
+public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussion, Serializable {
 
 
 	private String name;
@@ -101,6 +105,24 @@ public class Topic {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void inscription(InterfaceAffichageClient c, String topicName) throws RemoteException {
+		// TODO Auto-generated method stub
+		this.addClient((Client)c);
+	}
+
+	@Override
+	public void desInscription(InterfaceAffichageClient c, String topicName) throws RemoteException {
+		// TODO Auto-generated method stub
+		this.removeClient((Client)c);
+	}
+
+	@Override
+	public void diffuse(String message, String topicName) throws RemoteException {
+		this.writeLineInFile(message);
+		
 	}
 
 

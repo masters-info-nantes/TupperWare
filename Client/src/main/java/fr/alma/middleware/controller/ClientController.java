@@ -25,15 +25,13 @@ public class ClientController{
 
 	private InterfaceServeurForum interfaceServerForum;
 	private InterfaceAffichageClient interfaceAffichageClient;
-	private InterfaceSujetDiscussion interfaceSujetDiscussion;
 
 	private List<String> topicList;
 	private List<String> subscriptionsList;
-	private int currentTab;
+	private String currentTopic;
 	private String username;
 
 	public ClientController(){
-		this.currentTab = 0;
 		calendar.setTime(new Date());
 		topicList = new ArrayList<String>();
 		this.connect();
@@ -51,15 +49,11 @@ public class ClientController{
 		return interfaceAffichageClient;
 	}
 
-	public InterfaceSujetDiscussion getSD(){
-		return interfaceSujetDiscussion;
-	}
-
 	private void connect(){
 		try {
 			interfaceServerForum = (InterfaceServeurForum) LocateRegistry.getRegistry(1024).lookup("forum");
 			interfaceAffichageClient = (InterfaceAffichageClient) LocateRegistry.getRegistry(1024).lookup("affichage");
-			interfaceSujetDiscussion = (InterfaceSujetDiscussion) LocateRegistry.getRegistry(1024).lookup("sujet");
+			topicList = interfaceServerForum.getTopicsTitle();
 			//interfaceAffichageClient = (InterfaceAffichageClient) registry.lookup("affichage");
 
 		} catch (RemoteException | NotBoundException e) {
@@ -108,8 +102,8 @@ public class ClientController{
 		return logs;
 	}
 
-	public int getCurrentTabName(){
-		return this.currentTab;
+	public String getCurrentTopic(){
+		return this.currentTopic;
 	}
 
 	public List<String> getSubcriptionsList(){
@@ -126,7 +120,7 @@ public class ClientController{
 		System.out.println("["+ hours + ":" + minutes +"]" + " <" + this.username + "> : " + message
 				);
 		try {
-			interfaceSujetDiscussion.diffuse(
+			interfaceServerForum.obtientSujet(currentTopic).diffuse(
 					"["+ hours + ":" + minutes +"]" + " <" + this.username + "> " + message
 					);
 		} catch (RemoteException e) {
