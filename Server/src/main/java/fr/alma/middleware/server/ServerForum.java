@@ -6,6 +6,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import fr.alma.middleware.data.Client;
 import fr.alma.middleware.data.Topic;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
@@ -66,8 +67,20 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 
 	@Override
 	public List<String> getUsersList(String topic) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		List<String> usersName = new ArrayList<String>();
+		if(this.list.contains(topic)){
+			for(Topic t : this.list){
+				if(t.getName() == topic){
+					for(Client c : t.getClientList()){
+						usersName.add(c.getName());
+						System.out.println(c.getName());
+					}
+				}
+			}
+		}else{
+			throw new RemoteException();
+		}
+		return usersName;
 	}
 	
 	public void addTopic(Topic t){
