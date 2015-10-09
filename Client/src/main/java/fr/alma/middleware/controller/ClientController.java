@@ -31,12 +31,13 @@ public class ClientController{
 	private List<String> subscriptionsList;
 	private int currentTab;
 	private String username;
+	private String currentTopicName;
 
 	public ClientController(){
 		this.currentTab = 0;
 		calendar.setTime(new Date());
-		topicList = new ArrayList<String>();
 		this.connect();
+		topicList = getExistingTopics();
 
 
 	}
@@ -108,8 +109,8 @@ public class ClientController{
 		return logs;
 	}
 
-	public int getCurrentTabName(){
-		return this.currentTab;
+	public String getCurrentTopic(){
+		return this.subscriptionsList.get(currentTab);
 	}
 
 	public List<String> getSubcriptionsList(){
@@ -122,7 +123,7 @@ public class ClientController{
 	}
 
 
-	public void write(String message){
+	public void write(String message, String topicName){
 		System.out.println("["+ hours + ":" + minutes +"]" + " <" + this.username + "> : " + message
 				);
 		try {
@@ -156,5 +157,32 @@ public class ClientController{
 	public void setUsername(String username) {
 		this.username = username;
 	}
+
+
+
+	public void subscribe() {
+		try {
+			interfaceSujetDiscussion.inscription(interfaceAffichageClient);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
+
+
+	public void unSubscribe() throws RemoteException {
+		interfaceSujetDiscussion.desInscription(interfaceAffichageClient);
+	}
+
+
+
+	public void setCurrentTopic(String topicName) {
+		this.currentTopicName = topicName;
+	}
+
+
+
 
 }
