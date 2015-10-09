@@ -59,7 +59,6 @@ public class ClientController{
 	}
 
 	public void joinTopic(){
-
 	}
 
 	public List<String> getExistingTopics() {
