@@ -74,7 +74,6 @@ public class ClientController{
 	}
 
 	public void joinTopic(){
-
 	}
 
 	public int getTopicListSize(){

@@ -76,7 +76,7 @@ public class Topic {
 		}
 	}
 
-	public void removeClient(InterfaceAffichageClient c){
+	public void removeClient(Client c){
 		if(clientList.contains(c)){
 			clientList.remove(c);
 		}
