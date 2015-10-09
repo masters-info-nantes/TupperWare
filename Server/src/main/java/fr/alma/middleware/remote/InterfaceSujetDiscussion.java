@@ -10,5 +10,6 @@ public interface InterfaceSujetDiscussion extends Remote {
 	public void desInscription(InterfaceAffichageClient c)throws RemoteException;
 	
 	public void diffuse(String message)throws RemoteException;
+	public String getLogsContent() throws RemoteException;
 }
 

@@ -1,8 +1,10 @@
 package fr.alma.middleware.data;
 
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Serializable;
@@ -24,13 +26,13 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 
 
 	private String name;
-	private Set<Client> clientList;
+	private Set<InterfaceAffichageClient> clientList;
 	private BufferedWriter fichier;
 	private File file;
 
 	public Topic(String name) throws Exception{
 		this.name = name;
-		this.clientList = new HashSet<Client>();
+		this.clientList = new HashSet<InterfaceAffichageClient>();
         //Check if the log directory is present, if not, create it
         File dir = new File("logs");
         if (!dir.exists()) {
@@ -66,11 +68,11 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 	}
 
 
-	public Set<Client> getClientList(){
+	public Set<InterfaceAffichageClient> getClientList(){
 		return clientList;
 	}
 
-	public boolean addClient(Client c){
+	public boolean addClient(InterfaceAffichageClient c){
 		if(!clientList.contains(c)){
 			clientList.add(c);
 			return true;
@@ -80,7 +82,7 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 		}
 	}
 
-	public void removeClient(Client c){
+	public void removeClient(InterfaceAffichageClient c){
 		if(clientList.contains(c)){
 			clientList.remove(c);
 		}
@@ -111,20 +113,50 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 	@Override
 	public void inscription(InterfaceAffichageClient c) throws RemoteException {
 		// TODO Auto-generated method stub
-		this.addClient((Client)c);
+		this.addClient(c);
 	}
 
 	@Override
 	public void desInscription(InterfaceAffichageClient c) throws RemoteException {
 		// TODO Auto-generated method stub
-		this.removeClient((Client)c);
+		this.removeClient(c);
 	}
 
 	@Override
 	public void diffuse(String message) throws RemoteException {
 		this.writeLineInFile(message);
+		for(InterfaceAffichageClient c : this.getClientList())
+		{
+			c.affiche(message,this.name);
+		}
 		System.out.println(message);
 		
+	}
+	
+	public String getLogsContent() throws RemoteException {
+		BufferedReader br = null;
+		String content = "";
+		try {
+
+			String sCurrentLine;
+
+			br = new BufferedReader(new FileReader("logs/"+this.name+".logs"));
+
+			while ((sCurrentLine = br.readLine()) != null) {
+				System.out.println(sCurrentLine);
+				content+=sCurrentLine;
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)br.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+		return content;
 	}
 
 

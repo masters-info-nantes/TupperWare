@@ -21,7 +21,6 @@ public class MainServer{
 	protected MainServer() throws RemoteException {
 		super();
 		this.isf = new ServerForum();
-		this.iac = new ServerAfficheClient();
 	}
     
     public InterfaceServeurForum getIsf()
@@ -50,7 +49,7 @@ public class MainServer{
 			Registry registry =  LocateRegistry.createRegistry(port);
 			MainServer obj = new MainServer();
 			registry.rebind("forum", obj.getIsf());
-			registry.rebind("affichage", obj.getIac());
+			//registry.rebind("affichage", obj.getIac());
 			
 			System.out.println("Serveur lancé à l'adresse "+ip_adress + ":" + port);
 		} catch (Exception e) {

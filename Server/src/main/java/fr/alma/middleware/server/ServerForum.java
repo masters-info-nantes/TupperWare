@@ -8,6 +8,7 @@ import java.util.List;
 
 import fr.alma.middleware.data.Client;
 import fr.alma.middleware.data.Topic;
+import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 import fr.alma.middleware.remote.InterfaceSujetDiscussion;
 
@@ -75,10 +76,12 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 	@Override
 	public List<String> getUsersList(String topic) throws RemoteException {
 		List<String> usersName = new ArrayList<String>();
+		return usersName;
+		/*
 		if(this.list.contains(topic)){
 			for(Topic t : this.list){
 				if(t.getName() == topic){
-					for(Client c : t.getClientList()){
+					for(InterfaceAffichageClient c : t.getClientList()){
 						usersName.add(c.getName());
 						System.out.println(c.getName());
 					}
@@ -88,6 +91,7 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 			throw new RemoteException();
 		}
 		return usersName;
+		*/
 	}
 	
 	public void addTopic(Topic t){

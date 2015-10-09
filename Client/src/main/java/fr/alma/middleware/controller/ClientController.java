@@ -11,7 +11,7 @@ import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 
 
-public class ClientController{
+public class ClientController implements InterfaceAffichageClient{
 
 
 	private Calendar calendar = Calendar.getInstance();
@@ -90,7 +90,7 @@ public class ClientController{
 	public String getLogsContent(String logsFile){
 		String logs = "";
 		try {
-			logs = interfaceAffichageClient.getLogsContent(logsFile);
+			logs = interfaceServerForum.obtientSujet(currentTopicName).getLogsContent();
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -168,6 +168,15 @@ public class ClientController{
 
 	public void setCurrentTopic(String topicName) {
 		this.currentTopicName = topicName;
+	}
+
+
+
+	@Override
+	public void affiche(String Message, String topicName) throws RemoteException {
+		System.out.println("affiche:"+Message);
+		//TODO: Doit appeler la vue pour ajouter le contenu dans la textbox 
+		
 	}
 
 
