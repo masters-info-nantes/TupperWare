@@ -4,15 +4,14 @@ package fr.alma.middleware.data;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Serializable;
-import java.rmi.server.UnicastRemoteObject;
 import java.rmi.RemoteException;
-
+import java.rmi.server.UnicastRemoteObject;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -109,24 +108,45 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 		}
 	}
     
-    public String getLogsContent(){
-        String result = "";
-		try { 
-			String sCurrentLine;
-
-			while ((sCurrentLine = reader.readLine()) != null) {
-				System.out.println(sCurrentLine);
-                result += sCurrentLine;
+	public String getLogsContent(){
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader("logs/" + name + ".logs"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    StringBuilder sb = null;
+		try {
+	        sb = new StringBuilder();
+	        String line = null;
+			try {
+				line = br.readLine();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
-		} catch (IOException e) {
+	        while (line != null) {
+	            sb.append(line);
+	            sb.append("\n");
+	            line = br.readLine();
+	        }
+	        
+	    } catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-            //if (reader != null)closeLogsFile();
-		}
-		return result;
+	        try {
+				br.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
+	    return sb.toString();
 	}
-
+	
 	public void closeLogsFile(){
 		try {
 			reader.close();

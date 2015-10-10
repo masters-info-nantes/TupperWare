@@ -120,6 +120,10 @@ public class ClientView extends Application{
 					//controller.setCurrentTopic(topicName);
 					controller.write(textField.getText(), controller.getCurrentTopicName());
 					textField.setText("");
+					updateTextArea();
+					System.out.println("LOGS CONTENT ON :"+controller.getCurrentTopicName());
+					System.out.println(controller.getLogsContent(controller.getCurrentTopicName()));
+					System.out.println("LOGS CONTENT END");
 				}
 
 			}
@@ -152,9 +156,8 @@ public class ClientView extends Application{
 					public void changed(ObservableValue<? extends Tab> ov,
 							Tab t1, Tab t2) {
 						String tabName = tabPane.getSelectionModel().getSelectedItem().getText();
-						textArea.setText(controller.getLogsContent(tabName));
-						System.out.println("Tab changed " + tabPane.getSelectionModel().getSelectedItem().getText());
 						controller.setCurrentTopic(tabPane.getSelectionModel().getSelectedItem().getText());
+						updateTextArea();
 					}
 
 				});
@@ -178,13 +181,14 @@ public class ClientView extends Application{
 	private void checkSubscriptionOn(String topic) throws RemoteException{
 
 		if(!controller.isAlreadySubscribeOn(topic)){
-			System.out.println("Subscription");
 			Tab newTab;
 			tabPane.getTabs().add(newTab = new Tab(topic));
 			tabPane.getSelectionModel().select(newTab);
+			updateTextArea();
 
 		}else{
 			tabPane.getTabs().remove(topic);
+			tabPane.getSelectionModel().select(0);
 		}
 
 
@@ -318,7 +322,6 @@ public class ClientView extends Application{
 			updateTextArea();
 			primaryStage.show();
 
-			System.out.println("Connection to the server");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

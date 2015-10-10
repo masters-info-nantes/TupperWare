@@ -36,7 +36,6 @@ public class MainServer{
         
 
 	public static void main(String[] args) {
-		System.out.println("HELLO WORLD !");
 		runServer("127.0.0.1", 1024);
 		
 	}

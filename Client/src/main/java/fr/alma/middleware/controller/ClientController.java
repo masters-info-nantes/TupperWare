@@ -135,9 +135,8 @@ public class ClientController extends UnicastRemoteObject implements InterfaceAf
 	}
 
 	public void showSubscriptionList() throws RemoteException{
-		System.out.println("Show subscription list");
 		for(int i = 0; i < interfaceServerForum.getSubscriptionListForClient(this).size(); i++){
-			System.out.println(interfaceServerForum.getSubscriptionListForClient(this).get(i));
+			System.out.print(interfaceServerForum.getSubscriptionListForClient(this).get(i)+", ");
 		}
 	}
 
@@ -145,9 +144,7 @@ public class ClientController extends UnicastRemoteObject implements InterfaceAf
 		
 		showSubscriptionList();
 		if(!interfaceServerForum.getSubscriptionListForClient(this).contains(selectedItem)){
-			System.out.println("Not already subscribed");
 			currentTopicName = selectedItem;
-            System.out.println("SUBSCRIBTION:"+selectedItem);
             subscribe();
 			return false;	
 		}else{
@@ -192,7 +189,6 @@ public class ClientController extends UnicastRemoteObject implements InterfaceAf
 
 	@Override
 	public void affiche(String Message, String topicName) throws RemoteException {
-		System.out.println("affiche:"+Message);
 		//TODO: Doit appeler la vue pour ajouter le contenu dans la textbox 
 		
 	}
