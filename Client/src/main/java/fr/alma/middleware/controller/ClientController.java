@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.io.Serializable;
 import java.rmi.server.UnicastRemoteObject;
 
-
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
 
@@ -135,16 +134,25 @@ public class ClientController extends UnicastRemoteObject implements InterfaceAf
 		return username;
 	}
 
+	public void showSubscriptionList() throws RemoteException{
+		System.out.println("Show subscription list");
+		for(int i = 0; i < interfaceServerForum.getSubscriptionListForClient(this).size(); i++){
+			System.out.println(interfaceServerForum.getSubscriptionListForClient(this).get(i));
+		}
+	}
 
-
-	public boolean isSubscribeOn(String selectedItem) {
-		if(!subscriptionsList.contains(selectedItem)){
-            currentTopicName = selectedItem;
+	public boolean isAlreadySubscribeOn(String selectedItem) throws RemoteException {
+		
+		showSubscriptionList();
+		if(!interfaceServerForum.getSubscriptionListForClient(this).contains(selectedItem)){
+			System.out.println("Not already subscribed");
+			currentTopicName = selectedItem;
             System.out.println("SUBSCRIBTION:"+selectedItem);
             subscribe();
-			return true;	
+			return false;	
 		}else{
-			return false;
+			unSubscribe();
+			return true;
 		}
 
 	}
@@ -188,6 +196,9 @@ public class ClientController extends UnicastRemoteObject implements InterfaceAf
 		//TODO: Doit appeler la vue pour ajouter le contenu dans la textbox 
 		
 	}
+
+
+
 
 
 

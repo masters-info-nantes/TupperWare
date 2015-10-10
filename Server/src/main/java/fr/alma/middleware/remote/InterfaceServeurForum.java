@@ -12,6 +12,7 @@ public interface InterfaceServeurForum extends Remote {
 	public List<String> getUsersList(String topic) throws Exception;
 	public void proposeSujet(String titre) throws Exception;
     public InterfaceSujetDiscussion obtientSujet(String titre) throws RemoteException;
+    public List<String> getSubscriptionListForClient(InterfaceAffichageClient c) throws RemoteException;
 
 
 }

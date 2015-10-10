@@ -16,7 +16,7 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 
 	protected ServerForum() throws RemoteException {
 		super();
-		
+
 		try {
 			this.list.add(new Topic("Musique"));
 			this.list.add(new Topic("Cinema"));
@@ -46,19 +46,19 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 	public void proposeSujet(String titre)
 			throws Exception {
 		if(this.list.contains(titre))
-        {
-            throw new Exception("Topic already exists");
-        }
-        else
-        {
-            try{
-                this.addTopic(new Topic(titre));
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-            }
-        }
+		{
+			throw new Exception("Topic already exists");
+		}
+		else
+		{
+			try{
+				this.addTopic(new Topic(titre));
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
 
 	}
 
@@ -69,36 +69,50 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 			topicsTitle.add(list.get(i).getName());
 			System.out.println(list.get(i).getName());
 		}
-		
+
 		return topicsTitle;
 	}
 
 	@Override
 	public List<String> getUsersList(String topic) throws Exception {
-        List localList = new ArrayList();
+		List localList = new ArrayList();
 		for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getName().equals(topic))
-            {
-                localList.addAll(list.get(i).getClientList());
-                return localList;
-            }
-        }
+			if(list.get(i).getName().equals(topic))
+			{
+				localList.addAll(list.get(i).getClientList());
+				return localList;
+			}
+		}
 		throw new Exception("Topic doesn't exist");
 	}
-	
+
 	public void addTopic(Topic t){
 		list.add(t);
 	}
-    
-    public String getTopicContent(String topic) throws Exception {
+
+	public String getTopicContent(String topic) throws Exception {
 		for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getName().equals(topic))
-            {
-                return list.get(i).getLogsContent();
-            }
-        }
+			if(list.get(i).getName().equals(topic))
+			{
+				return list.get(i).getLogsContent();
+			}
+		}
 		throw new Exception("Topic doesn't exist");
-    }
+	}
+
+	@Override
+	public List<String> getSubscriptionListForClient(InterfaceAffichageClient c)	throws RemoteException {
+		List<String> listToReturn = new ArrayList<String>();
+		//for each topic in topiclist
+		//if topic.get(i).contains(clientName)
+		//add topic.getName in return list
+		for(int i = 0; i < list.size(); i++){
+			if(list.get(i).getClientList().contains(c)){
+				listToReturn.add(list.get(i).getName());
+			}
+		}
+		return listToReturn;
+	}
 
 
 }

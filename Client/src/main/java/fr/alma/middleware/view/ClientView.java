@@ -1,5 +1,6 @@
 package fr.alma.middleware.view;
 
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,7 +75,7 @@ public class ClientView extends Application{
 		leftBox.getChildren().addAll(textArea, textField);
 		bottomRightBox.getChildren().addAll(refresh, newTopic);
 		rightBox.getChildren().addAll(listView, bottomRightBox);
-		
+
 
 
 
@@ -116,9 +117,8 @@ public class ClientView extends Application{
 			public void handle(KeyEvent ke) {
 
 				if(ke.getCode() == KeyCode.ENTER){
-					String topicName =	tabPane.getSelectionModel().getSelectedItem().getText();
 					//controller.setCurrentTopic(topicName);
-					controller.write(textField.getText(), topicName);
+					controller.write(textField.getText(), controller.getCurrentTopicName());
 					textField.setText("");
 				}
 
@@ -133,7 +133,12 @@ public class ClientView extends Application{
 			public void handle(MouseEvent event) {
 				if(event.getButton() == MouseButton.PRIMARY){
 					if(event.getClickCount() == 2){
-						checkSubscription();
+						try {
+							String topic = listView.getSelectionModel().getSelectedItem();
+							checkSubscriptionOn(topic);
+						} catch (RemoteException e) {
+							e.printStackTrace();
+						}
 					}
 
 				}
@@ -149,11 +154,11 @@ public class ClientView extends Application{
 						String tabName = tabPane.getSelectionModel().getSelectedItem().getText();
 						textArea.setText(controller.getLogsContent(tabName));
 						System.out.println("Tab changed " + tabPane.getSelectionModel().getSelectedItem().getText());
-						
+						controller.setCurrentTopic(tabPane.getSelectionModel().getSelectedItem().getText());
 					}
-					
+
 				});
-		
+
 	}
 
 
@@ -170,17 +175,16 @@ public class ClientView extends Application{
 
 
 
-	private void checkSubscription(){
+	private void checkSubscriptionOn(String topic) throws RemoteException{
 
-		String item = listView.getSelectionModel().getSelectedItem();
-		if(controller.isSubscribeOn(item)){
+		if(!controller.isAlreadySubscribeOn(topic)){
 			System.out.println("Subscription");
 			Tab newTab;
-			tabPane.getTabs().add(newTab = new Tab(item.toString()));
+			tabPane.getTabs().add(newTab = new Tab(topic));
 			tabPane.getSelectionModel().select(newTab);
 
 		}else{
-			tabPane.getTabs().remove(item);
+			tabPane.getTabs().remove(topic);
 		}
 
 
@@ -235,6 +239,12 @@ public class ClientView extends Application{
 				//Add specific color for a subscribed topic
 				//listView.getItems().get(i).
 			}
+		}
+	}
+
+	public void updateTextArea(){
+		if(controller.getCurrentTopicName() != null){
+			textArea.setText(controller.getLogsContent(controller.getCurrentTopicName()));
 		}
 	}
 
@@ -305,6 +315,7 @@ public class ClientView extends Application{
 			primaryStage.setScene(new Scene(createContent()));
 			primaryStage.setResizable(false);
 			refreshTopics();
+			updateTextArea();
 			primaryStage.show();
 
 			System.out.println("Connection to the server");
