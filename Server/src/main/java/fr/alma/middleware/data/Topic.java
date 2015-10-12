@@ -52,7 +52,7 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 		this.file = new File("logs/" + name + ".logs");
 
 		try {
-			writer = new BufferedWriter(new FileWriter("logs/" + name + ".logs"));
+			writer = new BufferedWriter(new FileWriter("logs/" + name + ".logs", true));
 			reader = new BufferedReader(new FileReader("logs/" + name + ".logs"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
