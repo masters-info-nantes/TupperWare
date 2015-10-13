@@ -12,11 +12,12 @@ import java.rmi.server.UnicastRemoteObject;
 
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
+import fr.alma.middleware.view.ClientView;
 
 
 public class ClientController extends UnicastRemoteObject implements InterfaceAffichageClient, Serializable {
 
-
+    private ClientView view;
 	private Calendar calendar = Calendar.getInstance();
 
 	private int hours = calendar.get(Calendar.HOUR_OF_DAY);
@@ -30,10 +31,11 @@ public class ClientController extends UnicastRemoteObject implements InterfaceAf
 	private String username;
 	private String currentTopicName;
 
-	public ClientController() throws Exception{
+	public ClientController(ClientView v) throws Exception{
 		calendar.setTime(new Date());
 		this.connect();
 		topicList = getExistingTopics();
+        this.view = v;
 
 
 	}
@@ -189,7 +191,7 @@ public class ClientController extends UnicastRemoteObject implements InterfaceAf
 
 	@Override
 	public void affiche(String Message, String topicName) throws RemoteException {
-		//TODO: Doit appeler la vue pour ajouter le contenu dans la textbox 
+		this.view.updateTextArea(); 
 		
 	}
 

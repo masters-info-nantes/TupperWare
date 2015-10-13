@@ -315,7 +315,7 @@ public class ClientView extends Application{
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			controller = new ClientController();
+			controller = new ClientController(this);
 			dialogBox();
 			primaryStage.setScene(new Scene(createContent()));
 			primaryStage.setResizable(false);
