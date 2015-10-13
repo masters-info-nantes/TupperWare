@@ -170,9 +170,10 @@ public class ClientView extends Application{
 	}
 
 	public void createNewTopic(){
-		/*int editableRow = controller.getTopicListSize();
+		refreshTopics();
+		int editableRowPosition = controller.getExistingTopics().size();
 
-		listView.getSelectionModel().select(editableRow);*/
+		System.out.println("New topic");
 
 	}
 
@@ -320,6 +321,7 @@ public class ClientView extends Application{
 			primaryStage.setResizable(false);
 			refreshTopics();
 			updateTextArea();
+			primaryStage.setTitle("Forum RMI - "+controller.getName());
 			primaryStage.show();
 
 		} catch (Exception e) {
@@ -335,4 +337,6 @@ public class ClientView extends Application{
 	}
 
 
+	
+	
 }
