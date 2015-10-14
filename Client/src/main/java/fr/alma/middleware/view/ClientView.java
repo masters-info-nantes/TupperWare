@@ -29,6 +29,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
@@ -37,6 +38,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javafx.util.Pair;
 import fr.alma.middleware.controller.ClientController;
 
@@ -165,14 +167,30 @@ public class ClientView extends Application{
 	}
 
 
-	public void showTopicsBox(){
-
+	public String showTopicsBox(){
+		String topicName = null;
+		TextInputDialog dialog = new TextInputDialog("");
+		Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+		dialog.setTitle("Text Input Dialog");
+		dialog.setHeaderText("Look, a Text Input Dialog");
+		dialog.setContentText("Please enter your name:");
+		okButton.setDisable(true);
+		// Traditional way to get the response value.
+		Optional<String> result = dialog.showAndWait();
+		if (result.isPresent()){
+			topicName = result.get();
+		}
+		
+		// The Java 8 way to get the response value (with lambda expression).
+		//result.ifPresent(name -> .println("Your name: " + name));
+		return topicName;
 	}
 
 	public void createNewTopic(){
+		String topicName = showTopicsBox();
+		controller.createTopic(topicName);
 		refreshTopics();
 		int editableRowPosition = controller.getExistingTopics().size();
-
 		System.out.println("New topic");
 
 	}
@@ -324,6 +342,12 @@ public class ClientView extends Application{
 			primaryStage.setTitle("Forum RMI - "+controller.getName());
 			primaryStage.show();
 
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				public void handle(WindowEvent we) {
+					System.out.println("Stage is closing");
+				}
+			});
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -337,6 +361,6 @@ public class ClientView extends Application{
 	}
 
 
-	
-	
+
+
 }

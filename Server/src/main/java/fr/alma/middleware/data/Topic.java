@@ -28,7 +28,7 @@ public class Topic extends UnicastRemoteObject implements InterfaceSujetDiscussi
 
 
 	private String name;
-
+	private InterfaceAffichageClient owner;
 	private BufferedWriter writer;
 	private BufferedReader reader;
 	private Set<InterfaceAffichageClient> clientList;

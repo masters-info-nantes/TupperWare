@@ -92,6 +92,18 @@ public class ClientController extends UnicastRemoteObject implements InterfaceAf
 		return list;
 	}
 
+	public void createTopic(String name){
+		System.out.println("Je");
+		try {
+			System.out.println("suis");
+			interfaceServerForum.proposeSujet(name);
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			System.out.println("pouet");
+			e.printStackTrace();
+		}
+	}
+	
 	//Get topic logs file from server
 	public String getLogsContent(String logsFile){
 		String logs = "";

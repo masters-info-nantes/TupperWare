@@ -1,12 +1,12 @@
 package fr.alma.middleware.server;
 
+import java.io.File;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.alma.middleware.data.Client;
 import fr.alma.middleware.data.Topic;
 import fr.alma.middleware.remote.InterfaceAffichageClient;
 import fr.alma.middleware.remote.InterfaceServeurForum;
@@ -18,9 +18,7 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 		super();
 
 		try {
-			this.list.add(new Topic("Musique"));
-			this.list.add(new Topic("Cinema"));
-			this.list.add(new Topic("Sport"));
+			this.list = listLogsFile();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -53,6 +51,7 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 		{
 			try{
 				this.addTopic(new Topic(titre));
+				System.out.println("Create new topic :"+titre);
 			}
 			catch(Exception e)
 			{
@@ -67,7 +66,6 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 		List<String> topicsTitle = new ArrayList<String>();
 		for(int i = 0; i < list.size(); i++){
 			topicsTitle.add(list.get(i).getName());
-			System.out.println(list.get(i).getName());
 		}
 
 		return topicsTitle;
@@ -113,6 +111,33 @@ public class ServerForum extends UnicastRemoteObject implements InterfaceServeur
 		}
 		return listToReturn;
 	}
+
+
+    private List<Topic> listLogsFile(){
+
+    	List<Topic> list = new ArrayList<Topic>();
+    	
+        File directory = new File("logs");
+
+        //get all the files from a directory
+        File[] fList = directory.listFiles();
+
+        for (File file : fList){
+        	
+            if (file.isFile() && file.getName().endsWith(".logs")){
+                try {
+                	//Add topic name from file without logs extension
+					list.add(new Topic(file.getName().substring(0,file.getName().length()-5)));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+            }
+        }
+        
+        return list;
+
+    }
+
 
 
 }
