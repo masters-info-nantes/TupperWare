@@ -93,14 +93,16 @@ public class ClientController extends UnicastRemoteObject implements InterfaceAf
 	}
 
 	public void createTopic(String name){
-		System.out.println("Je");
-		try {
-			System.out.println("suis");
-			interfaceServerForum.proposeSujet(name);
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			System.out.println("pouet");
-			e.printStackTrace();
+		if(!name.equals("") || !name.equals(null)){
+			System.out.println("Je");
+			try {
+				System.out.println("suis");
+				interfaceServerForum.proposeSujet(name);
+			} catch (RemoteException e) {
+				// TODO Auto-generated catch block
+				System.out.println("pouet");
+				e.printStackTrace();
+			}
 		}
 	}
 	
